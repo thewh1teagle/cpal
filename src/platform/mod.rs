@@ -851,9 +851,15 @@ mod platform_impl {
 
 #[cfg(target_vendor = "apple")]
 mod platform_impl {
+    #[cfg(target_os = "macos")]
+    #[cfg_attr(docsrs, doc(cfg(target_os = "macos")))]
+    pub use crate::host::coreaudio::macos::permissions::{
+        open_system_audio_settings, request_system_audio_permission,
+    };
+    #[cfg_attr(docsrs, doc(cfg(any(target_os = "macos", target_os = "ios"))))]
+    pub use crate::host::coreaudio::Host as CoreAudioHost;
     #[cfg(all(feature = "jack", target_os = "macos"))]
     use super::JackHost;
-    use crate::host::coreaudio::Host as CoreAudioHost;
 
     impl_platform_host!(
         CoreAudio => CoreAudioHost,
